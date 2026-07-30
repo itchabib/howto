@@ -1,73 +1,112 @@
-/* Basic responsive layout and typography for the How to Service a Laptop page */
+/* Modern minimalist stylesheet for the How to Service a Laptop site */
 :root{
-  --bg:#f7f8fb;
-  --card:#ffffff;
-  --accent:#0b66ff;
-  --muted:#6b7280;
-  --max-width:900px;
-  --radius:10px;
+  --bg: #f7f8fb;
+  --card: #ffffff;
+  --accent: #0b66ff;
+  --muted: #6b7280;
+  --text: #0f172a;
+  --max-width: 960px;
+  --radius: 12px;
+  --gap: 1rem;
 }
 
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
   margin:0;
-  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   background:var(--bg);
-  color:#111827;
+  color:var(--text);
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
-  line-height:1.5;
+  line-height:1.6;
+  font-size:16px;
 }
 
 .container{
   max-width:var(--max-width);
-  margin:1.25rem auto;
-  padding:0 1rem;
+  margin:1.75rem auto;
+  padding:0 1.25rem;
 }
 
+/* Header */
 .site-header{
-  background:linear-gradient(90deg,#eef6ff,transparent);
+  background:linear-gradient(90deg, rgba(14,94,255,0.06), transparent);
   padding:2rem 0;
   border-bottom:1px solid rgba(15,23,42,0.04);
 }
+.site-header .container{display:flex;flex-direction:column;gap:.5rem}
+.site-header .top{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem
+}
 .site-header h1{
-  margin:0 0 .25rem 0;
-  font-size:1.75rem;
-  letter-spacing:-0.5px;
+  margin:0; font-size:1.5rem; font-weight:700; letter-spacing:-0.4px;
 }
-.tagline{
-  margin:0;
-  color:var(--muted);
+.tagline{margin:0;color:var(--muted);font-weight:500}
+
+/* Navigation */
+.site-header nav{margin-top:.5rem}
+.site-header nav a{color:var(--muted);text-decoration:none;margin-right:.75rem;font-weight:600}
+.site-header nav a.active, .site-header nav a:hover{color:var(--text)}
+
+/* Skip link (accessible) */
+.skip-link{
+  position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;
+  background:var(--text);color:white;padding:.5rem .75rem;border-radius:8px;z-index:9999;
 }
+.skip-link:focus{left:1rem;top:1rem;width:auto;height:auto}
+
+/* Search */
+#site-search{width:100%;padding:.75rem 1rem;border-radius:10px;border:1px solid rgba(15,23,42,0.06);background:white;font-size:1rem}
+#site-search:focus{outline:2px solid rgba(11,102,255,0.12);border-color:rgba(11,102,255,0.2)}
 
 /* Card-style sections */
 main section{
   background:var(--card);
-  margin:1rem 0;
-  padding:1.25rem 1.25rem;
+  margin:1.25rem 0;
+  padding:1.25rem;
   border-radius:var(--radius);
-  box-shadow:0 6px 18px rgba(11,22,40,0.04);
+  box-shadow:0 8px 24px rgba(11,22,40,0.04);
 }
-main section h2{margin-top:0;color:#0f172a}
-main section p{margin:.5rem 0}
-ul,ol{margin:.5rem 0 0 1.25rem}
-ol li{margin:.5rem 0}
-footer{margin:1rem 0 3rem;color:var(--muted);font-size:.95rem}
+main section h2{margin-top:0;color:var(--text);font-size:1.125rem}
+main section p{margin:.5rem 0;color:var(--muted)}
 
-/* Helpful layout tweaks */
-@media (min-width:820px){
+/* Results listing */
+#results{margin-top:.5rem}
+#results article{
+  display:flex;gap:1rem;align-items:flex-start;padding:.75rem;border-radius:8px;background:linear-gradient(180deg, #fff, #fbfdff);border:1px solid rgba(11,22,40,0.03);
+}
+#results img{width:96px;height:72px;object-fit:cover;border-radius:6px}
+#results h3{margin:0;font-size:1rem}
+#results p{margin:.4rem 0;color:var(--muted);font-size:.95rem}
+#results a{color:var(--accent);text-decoration:none;font-weight:600}
+#results a:hover{text-decoration:underline}
+mark{background:rgba(11,102,255,0.12);padding:0 .15rem;border-radius:2px}
+
+/* List of tutorials */
+ul.tutorial-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.75rem;padding:0;list-style:none;margin:0}
+ul.tutorial-list li{background:transparent;padding:.5rem;border-radius:8px}
+ul.tutorial-list a{color:var(--text);text-decoration:none}
+ul.tutorial-list a:hover{color:var(--accent)}
+
+/* Two-column layout */
+@media (min-width:900px){
   .two-col{display:grid;grid-template-columns:1fr 320px;gap:1rem}
   .sticky-aside{position:sticky;top:1rem;align-self:start}
+  .site-header .container{flex-direction:row;align-items:center}
 }
 
-/* Buttons / links */
-a.button{
-  display:inline-block;padding:.5rem .75rem;border-radius:8px;background:var(--accent);color:white;text-decoration:none;font-weight:600;
-}
-a{color:var(--accent);text-decoration:underline}
+/* Footer */
+footer{margin:1.5rem 0 3rem;color:var(--muted);font-size:.95rem}
 
-/* Print styles */
+/* Links & buttons */
+a{color:var(--accent)}
+a.button{display:inline-block;padding:.5rem .75rem;border-radius:8px;background:var(--accent);color:white;text-decoration:none;font-weight:600}
+
+/* Accessibility helpers */
+[role="status"]{min-height:3rem}
+
+/* Print */
 @media print{
   body{background:white;color:#111}
   .site-header, a.button {display:none}
