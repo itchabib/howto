@@ -1,0 +1,75 @@
+/* Basic responsive layout and typography for the How to Service a Laptop page */
+:root{
+  --bg:#f7f8fb;
+  --card:#ffffff;
+  --accent:#0b66ff;
+  --muted:#6b7280;
+  --max-width:900px;
+  --radius:10px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  background:var(--bg);
+  color:#111827;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.5;
+}
+
+.container{
+  max-width:var(--max-width);
+  margin:1.25rem auto;
+  padding:0 1rem;
+}
+
+.site-header{
+  background:linear-gradient(90deg,#eef6ff,transparent);
+  padding:2rem 0;
+  border-bottom:1px solid rgba(15,23,42,0.04);
+}
+.site-header h1{
+  margin:0 0 .25rem 0;
+  font-size:1.75rem;
+  letter-spacing:-0.5px;
+}
+.tagline{
+  margin:0;
+  color:var(--muted);
+}
+
+/* Card-style sections */
+main section{
+  background:var(--card);
+  margin:1rem 0;
+  padding:1.25rem 1.25rem;
+  border-radius:var(--radius);
+  box-shadow:0 6px 18px rgba(11,22,40,0.04);
+}
+main section h2{margin-top:0;color:#0f172a}
+main section p{margin:.5rem 0}
+ul,ol{margin:.5rem 0 0 1.25rem}
+ol li{margin:.5rem 0}
+footer{margin:1rem 0 3rem;color:var(--muted);font-size:.95rem}
+
+/* Helpful layout tweaks */
+@media (min-width:820px){
+  .two-col{display:grid;grid-template-columns:1fr 320px;gap:1rem}
+  .sticky-aside{position:sticky;top:1rem;align-self:start}
+}
+
+/* Buttons / links */
+a.button{
+  display:inline-block;padding:.5rem .75rem;border-radius:8px;background:var(--accent);color:white;text-decoration:none;font-weight:600;
+}
+a{color:var(--accent);text-decoration:underline}
+
+/* Print styles */
+@media print{
+  body{background:white;color:#111}
+  .site-header, a.button {display:none}
+  main section{box-shadow:none;border-radius:0}
+}
