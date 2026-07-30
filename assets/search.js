@@ -19,6 +19,19 @@ document.addEventListener('DOMContentLoaded', function(){
     new URL('/assets/search-index.json', location.origin).href
   ];
 
+  // Ensure Fuse.js is available; if not, dynamically load from a CDN fallback.
+  function ensureFuse(){
+    if(typeof Fuse !== 'undefined') return Promise.resolve();
+    return new Promise((resolve, reject)=>{
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js';
+      s.async = true;
+      s.onload = () => { if(typeof Fuse !== 'undefined') resolve(); else reject(new Error('Fuse did not attach')); };
+      s.onerror = () => reject(new Error('Failed to load Fuse.js'));
+      document.head.appendChild(s);
+    });
+  }
+
   async function loadIndex(){
     for(const u of candidates){
       try{
@@ -32,7 +45,10 @@ document.addEventListener('DOMContentLoaded', function(){
           ignoreLocation: true,
           minMatchCharLength: 2,
         };
-        fuse = new Fuse(index, options);
+        // If Fuse is not available for any reason, fall back to substring matching later.
+        if(typeof Fuse !== 'undefined'){
+          fuse = new Fuse(index, options);
+        }
         return true;
       }catch(e){
         // try next candidate
@@ -41,9 +57,16 @@ document.addEventListener('DOMContentLoaded', function(){
     return false;
   }
 
-  loadIndex().then(ok=>{
-    if(!ok) results.innerHTML = '<p>Search index could not be loaded.</p>';
-  });
+  (async function init(){
+    try{
+      await ensureFuse().catch(()=>{}); // try to load Fuse but continue even if it fails
+      const ok = await loadIndex();
+      if(!ok) results.innerHTML = '<p>Search index could not be loaded.</p>';
+    }catch(e){
+      console.error('Search initialization error', e);
+      results.innerHTML = '<p>Search index could not be loaded.</p>';
+    }
+  })();
 
   function highlight(text, terms){
     if(!terms || terms.length===0) return escapeHtml(text);
