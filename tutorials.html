@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Tutorials — How to Service a Laptop</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/fuse.js@6.6.2/dist/fuse.min.js" defer></script>
   <script src="assets/search.js" defer></script>
 </head>
 <body>
@@ -20,7 +21,7 @@
         <a href="tutorials.html">Tutorials</a>
       </nav>
       <div style="margin-top:.75rem">
-        <input id="site-search" placeholder="Search tutorials..." aria-label="Search tutorials" style="width:100%;padding:.5rem;border-radius:8px;border:1px solid #e5e7eb">
+        <input id="site-search" placeholder="Search tutorials..." aria-label="Search tutorials" aria-controls="results" style="width:100%;padding:.5rem;border-radius:8px;border:1px solid #e5e7eb" autofocus>
       </div>
     </div>
   </header>
@@ -28,18 +29,18 @@
   <main class="container">
     <section>
       <h2>Search results</h2>
-      <div id="results" style="margin-top:1rem"></div>
+      <div id="results" role="status" aria-live="polite" style="margin-top:1rem"></div>
     </section>
 
     <section style="margin-top:1.5rem">
       <h2>All tutorials</h2>
       <ul>
-        <li><a href="battery.html">Battery replacement</a></li>
-        <li><a href="keyboard.html">Keyboard replacement & key repair</a></li>
-        <li><a href="screen.html">Screen replacement & hinge repair</a></li>
-        <li><a href="fan-replacement.html">Fan replacement</a></li>
-        <li><a href="bios.html">BIOS/firmware & reset</a></li>
-        <li><a href="data-recovery.html">Data backup & recovery</a></li>
+        <li><a href="battery.html">Battery replacement</a> • <a href="battery.id.html">ID</a></li>
+        <li><a href="keyboard.html">Keyboard replacement & key repair</a> • <a href="keyboard.id.html">ID</a></li>
+        <li><a href="screen.html">Screen replacement & hinge repair</a> • <a href="screen.id.html">ID</a></li>
+        <li><a href="fan-replacement.html">Fan replacement</a> • <a href="fan-replacement.id.html">ID</a></li>
+        <li><a href="bios.html">BIOS/firmware & reset</a> • <a href="bios.id.html">ID</a></li>
+        <li><a href="data-recovery.html">Data backup & recovery</a> • <a href="data-recovery.id.html">ID</a></li>
       </ul>
     </section>
 

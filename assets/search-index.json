@@ -1,8 +1,14 @@
 {"pages":[
-  {"title":"Battery replacement","path":"battery.html","content":"Back up data. Power down. Remove charger. Open case. Disconnect battery cable. Remove battery pack. Install new battery. Run battery health checks."},
-  {"title":"Keyboard replacement & key repair","path":"keyboard.html","content":"Power down. Remove keycaps. Clean debris. Replace broken domes or scissor mechanisms. For full replacement remove keyboard module and ribbon cable."},
-  {"title":"Screen replacement & hinge repair","path":"screen.html","content":"Remove bezel. Disconnect display cable. Replace panel or hinges carefully. Reconnect and test before full reassembly."},
-  {"title":"Fan replacement","path":"fan-replacement.html","content":"Identify failing fan. Disconnect fan cable. Remove screws. Replace with compatible fan. Reconnect and test."},
-  {"title":"BIOS/firmware & reset","path":"bios.html","content":"Only use manufacturer firmware. Ensure power during update. Use recovery tools or CMOS reset if update fails."},
-  {"title":"Data backup & recovery","path":"data-recovery.html","content":"Create disk image or clone. Use TestDisk or PhotoRec from live USB for recovery. Prefer non-destructive operations."}
+  {"title":"Battery replacement","path":"battery.html","content":"Back up data. Power down. Remove charger. Open case. Disconnect battery cable. Remove battery pack. Install new battery. Run battery health checks.","lang":"en"},
+  {"title":"Penggantian baterai","path":"battery.id.html","content":"Cadangkan data. Matikan. Cabut charger. Buka casing. Cabut kabel baterai. Ganti paket baterai. Jalankan pemeriksaan kesehatan baterai.","lang":"id"},
+  {"title":"Keyboard replacement & key repair","path":"keyboard.html","content":"Power down. Remove keycaps. Clean debris. Replace broken domes or scissor mechanisms. For full replacement remove keyboard module and ribbon cable.","lang":"en"},
+  {"title":"Penggantian keyboard & perbaikan tombol","path":"keyboard.id.html","content":"Matikan. Lepas keycap. Bersihkan kotoran. Ganti bagian yang rusak atau modul keyboard lengkap jika perlu.","lang":"id"},
+  {"title":"Screen replacement & hinge repair","path":"screen.html","content":"Remove bezel. Disconnect display cable. Replace panel or hinges carefully. Reconnect and test before full reassembly.","lang":"en"},
+  {"title":"Penggantian layar & perbaikan engsel","path":"screen.id.html","content":"Lepaskan bezel. Cabut kabel display. Ganti panel atau engsel dengan hati-hati. Sambungkan kembali dan uji sebelum merakit.","lang":"id"},
+  {"title":"Fan replacement","path":"fan-replacement.html","content":"Identify failing fan. Disconnect fan cable. Remove screws. Replace with compatible fan. Reconnect and test.","lang":"en"},
+  {"title":"Penggantian kipas","path":"fan-replacement.id.html","content":"Identifikasi kipas bermasalah. Cabut kabel kipas. Lepaskan sekrup. Ganti kipas kompatibel. Sambungkan dan uji.","lang":"id"},
+  {"title":"BIOS/firmware & reset","path":"bios.html","content":"Only use manufacturer firmware. Ensure power during update. Use recovery tools or CMOS reset if update fails.","lang":"en"},
+  {"title":"BIOS/firmware & reset","path":"bios.id.html","content":"Hanya gunakan firmware pabrikan. Pastikan daya selama pembaruan. Gunakan alat pemulihan atau reset CMOS jika gagal.","lang":"id"},
+  {"title":"Data backup & recovery","path":"data-recovery.html","content":"Create disk image or clone. Use TestDisk or PhotoRec from live USB for recovery. Prefer non-destructive operations.","lang":"en"},
+  {"title":"Cadangan & pemulihan data","path":"data-recovery.id.html","content":"Buat citra disk atau clone. Gunakan TestDisk/PhotoRec dari live USB untuk pemulihan. Prioritaskan operasi non-destruktif.","lang":"id"}
 ]}

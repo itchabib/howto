@@ -1,56 +1,82 @@
 // assets/search.js
-// Simple client-side search for the static tutorials site.
-// Loads assets/search-index.json and performs a case-insensitive substring match.
+// Fuzzy client-side search using Fuse.js with accessibility improvements and debounce.
 
 document.addEventListener('DOMContentLoaded', function(){
   const input = document.getElementById('site-search');
   const results = document.getElementById('results');
-  if(!input) return; // search only present on tutorials page
+  if(!input || !results) return;
 
-  let index = null;
-  fetch('/howto/assets/search-index.json').then(r=>{
-    if(!r.ok) return fetch('/assets/search-index.json');
-    return r;
-  }).then(r=>r.json()).then(data=>{
-    index = data.pages;
+  let index = [];
+  let fuse = null;
+
+  fetch('/assets/search-index.json').then(r=>r.json()).then(data=>{
+    index = data.pages || [];
+    const options = {
+      keys: ['title','content'],
+      threshold: 0.4,
+      ignoreLocation: true,
+      minMatchCharLength: 2,
+    };
+    fuse = new Fuse(index, options);
   }).catch(()=>{
-    console.warn('Could not load search index');
+    results.innerHTML = '<p>Search index could not be loaded.</p>';
   });
 
-  function renderMatches(q){
-    if(!index) return results.innerHTML = '<p>Search index not loaded.</p>';
-    const ql = q.trim().toLowerCase();
-    if(!ql) return results.innerHTML = '<p>Type to search tutorials.</p>';
-    const terms = ql.split(/\s+/).filter(Boolean);
-    const matches = index.map(p=>{
-      const text = (p.title + ' ' + p.content).toLowerCase();
-      let score = 0;
-      terms.forEach(t=>{ if(text.includes(t)) score += 1; });
-      return {page:p,score}
-    }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
+  function highlight(text, terms){
+    if(!terms || terms.length===0) return escapeHtml(text);
+    let out = escapeHtml(text);
+    terms.forEach(t=>{
+      const re = new RegExp('('+escapeRegExp(t)+')','ig');
+      out = out.replace(re,'<mark>$1</mark>');
+    });
+    return out;
+  }
 
-    if(matches.length===0) return results.innerHTML = '<p>No results found.</p>';
+  function escapeHtml(s){
+    return (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function escapeRegExp(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
 
-    results.innerHTML = matches.map(m=>{
-      const title = m.page.title;
-      const path = m.page.path;
-      // create a simple snippet
-      const idx = m.page.content.toLowerCase().indexOf(terms[0]);
-      let snippet = m.page.content.substring(0,140);
-      if(idx>=0){
-        const start = Math.max(0, idx-40);
-        snippet = m.page.content.substring(start, start+180);
-        if(start>0) snippet = '...' + snippet;
-        if(start+180 < m.page.content.length) snippet = snippet + '...';
-      }
-      return `<article style="margin-bottom:1rem;padding:1rem;border-radius:8px;background:white"><h3><a href="${path}">${title}</a></h3><p style="color:#6b7280">${snippet}</p></article>`;
+  function render(list, terms){
+    if(!list || list.length===0) return results.innerHTML = '<p>No results found.</p>';
+    results.innerHTML = list.map(item=>{
+      const title = escapeHtml(item.title);
+      const path = item.path;
+      const snippet = item.content.length>200 ? item.content.substring(0,200)+'...' : item.content;
+      const snippetHtml = highlight(snippet, terms);
+      const img = path.replace(/\.id\.html|\.html$/,'').replace('.','') ;
+      return `<article style="margin-bottom:1rem;padding:1rem;border-radius:8px;background:white;display:flex;gap:1rem;align-items:flex-start"><img src="assets/placeholder-${img}.svg" alt="Illustration for ${title}" width="96" height="72" style="flex:0 0 96px;border-radius:6px;border:1px solid #e6eefc"><div><h3><a href="${path}">${title}</a></h3><p style="color:#6b7280">${snippetHtml}</p></div></article>`;
     }).join('');
   }
 
-  input.addEventListener('input', (e)=>{
-    renderMatches(e.target.value);
+  // debounce helper
+  function debounce(fn, delay){
+    let t = null; return function(...args){ clearTimeout(t); t = setTimeout(()=>fn.apply(this,args), delay); }
+  }
+
+  const onInput = debounce(function(e){
+    const q = (e.target.value||'').trim();
+    if(!q){
+      results.innerHTML = '<p>Type to search tutorials.</p>';
+      return;
+    }
+    const terms = q.split(/\s+/).filter(Boolean);
+    if(fuse){
+      const f = fuse.search(q, {limit: 10}).map(r=>r.item);
+      render(f, terms);
+    } else {
+      // fallback simple substring match
+      const ql = q.toLowerCase();
+      const matches = index.filter(p=> (p.title+p.content).toLowerCase().includes(ql));
+      render(matches.slice(0,10), terms);
+    }
+  }, 250);
+
+  input.addEventListener('input', onInput);
+  input.addEventListener('keydown', function(e){
+    if(e.key === 'Enter') e.preventDefault();
   });
 
-  // initial message
+  // initial state
   results.innerHTML = '<p>Type to search tutorials.</p>';
 });
