@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://itchabib.github.io/howto/sitemap.xml
