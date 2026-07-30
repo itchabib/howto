@@ -1,0 +1,8 @@
+{"pages":[
+  {"title":"Battery replacement","path":"battery.html","content":"Back up data. Power down. Remove charger. Open case. Disconnect battery cable. Remove battery pack. Install new battery. Run battery health checks."},
+  {"title":"Keyboard replacement & key repair","path":"keyboard.html","content":"Power down. Remove keycaps. Clean debris. Replace broken domes or scissor mechanisms. For full replacement remove keyboard module and ribbon cable."},
+  {"title":"Screen replacement & hinge repair","path":"screen.html","content":"Remove bezel. Disconnect display cable. Replace panel or hinges carefully. Reconnect and test before full reassembly."},
+  {"title":"Fan replacement","path":"fan-replacement.html","content":"Identify failing fan. Disconnect fan cable. Remove screws. Replace with compatible fan. Reconnect and test."},
+  {"title":"BIOS/firmware & reset","path":"bios.html","content":"Only use manufacturer firmware. Ensure power during update. Use recovery tools or CMOS reset if update fails."},
+  {"title":"Data backup & recovery","path":"data-recovery.html","content":"Create disk image or clone. Use TestDisk or PhotoRec from live USB for recovery. Prefer non-destructive operations."}
+]}
