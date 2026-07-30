@@ -1,0 +1,28 @@
+name: Accessibility checks (pa11y)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  pa11y:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install tools
+        run: npm install -g http-server pa11y
+      - name: Serve site
+        run: nohup http-server -p 8080 > server.log 2>&1 &
+      - name: Wait for server
+        run: sleep 2
+      - name: Run pa11y checks
+        run: |
+          pa11y http://127.0.0.1:8080/index.html --reporter cli || true
+          pa11y http://127.0.0.1:8080/index.id.html --reporter cli || true
+          pa11y http://127.0.0.1:8080/tutorials.html --reporter cli || true
