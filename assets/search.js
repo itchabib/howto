@@ -9,17 +9,40 @@ document.addEventListener('DOMContentLoaded', function(){
   let index = [];
   let fuse = null;
 
-  fetch('/assets/search-index.json').then(r=>r.json()).then(data=>{
-    index = data.pages || [];
-    const options = {
-      keys: ['title','content'],
-      threshold: 0.4,
-      ignoreLocation: true,
-      minMatchCharLength: 2,
-    };
-    fuse = new Fuse(index, options);
-  }).catch(()=>{
-    results.innerHTML = '<p>Search index could not be loaded.</p>';
+  // Try multiple candidate URLs so the search index loads correctly whether the site
+  // is served from the repo root or a project subpath (GitHub Pages: /<user>/<repo>/).
+  const candidates = [
+    new URL('./assets/search-index.json', location.href).href,
+    // attempt repo subpath using the repo name; this helps when the page is at /howto/
+    new URL('/howto/assets/search-index.json', location.origin).href,
+    // absolute site-root fallback
+    new URL('/assets/search-index.json', location.origin).href
+  ];
+
+  async function loadIndex(){
+    for(const u of candidates){
+      try{
+        const r = await fetch(u);
+        if(!r.ok) continue;
+        const data = await r.json();
+        index = data.pages || [];
+        const options = {
+          keys: ['title','content'],
+          threshold: 0.4,
+          ignoreLocation: true,
+          minMatchCharLength: 2,
+        };
+        fuse = new Fuse(index, options);
+        return true;
+      }catch(e){
+        // try next candidate
+      }
+    }
+    return false;
+  }
+
+  loadIndex().then(ok=>{
+    if(!ok) results.innerHTML = '<p>Search index could not be loaded.</p>';
   });
 
   function highlight(text, terms){
@@ -35,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function escapeHtml(s){
     return (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
-  function escapeRegExp(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+  function escapeRegExp(s){ return s.replace(/[.*+?^${}()|[\\]\\]/g,'\\$&'); }
 
   function render(list, terms){
     if(!list || list.length===0) return results.innerHTML = '<p>No results found.</p>';
@@ -44,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function(){
       const path = item.path;
       const snippet = item.content.length>200 ? item.content.substring(0,200)+'...' : item.content;
       const snippetHtml = highlight(snippet, terms);
-      const img = path.replace(/\.id\.html|\.html$/,'').replace('.','') ;
+      const img = path.replace(/\.id\.html|\.html$/,'').replace(/\./g,'') ;
       return `<article style="margin-bottom:1rem;padding:1rem;border-radius:8px;background:white;display:flex;gap:1rem;align-items:flex-start"><img src="assets/placeholder-${img}.svg" alt="Illustration for ${title}" width="96" height="72" style="flex:0 0 96px;border-radius:6px;border:1px solid #e6eefc"><div><h3><a href="${path}">${title}</a></h3><p style="color:#6b7280">${snippetHtml}</p></div></article>`;
     }).join('');
   }
